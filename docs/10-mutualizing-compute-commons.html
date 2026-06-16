@@ -205,270 +205,291 @@
 </head>
 <body>
 <div class="wrap">
-<h2 id="mutualizing-compute-commons-co-ops-and-the-reciprocity-spectrum">Mutualizing compute: commons, co-ops, and the reciprocity spectrum</h2>
+<h2 id="mutualizing-compute-commons-co-ops-and-reciprocity">Mutualizing compute: commons, co-ops, and reciprocity</h2>
 <blockquote>
-<p><strong>One-line verdict.</strong> Sharing compute outside a hyperscaler is a <em>solved problem in the commons</em> - there are mature, working systems for it. But the clean "earn idle, draw when busy, net-settle on a single balance" <strong>product</strong> only exists inside token economies, and there it reintroduces rent. For a 3–6 person artist-researcher collective, the most reliable virtuous circle is a <strong>self-built</strong> one: pool real hardware, share it internally by a non-monetary fair-use ledger, keep money out of the reciprocity layer, and apply in parallel to free public credits.</p>
+<p><strong>Scope.</strong> This section is about <em>sharing</em> compute non-commercially - lending an idle GPU and drawing on the pool when you need more - rather than buying it. The honest finding: a robust, single-balance <em>"earn idle, draw busy, net-settle"</em> <strong>product</strong> does not exist outside token economies, and inside them it tends to re-create rent. But the <em>commons</em> version is real, mature, and copyable by a small artist-researcher collective. The recurring failure mode is never the technology; it is governance - unmonitored free-riding, no graduated sanctions, and Sybil identities. (Framework after Elinor Ostrom, <em>Governing the Commons</em>, 1990, and Mozilla's 2024 digital-commons translation of Ostrom's eight design principles.)</p>
 </blockquote>
-<h3 id="1-four-governance-families-pick-by-trust-radius-not-by-hype">1. Four governance families (pick by trust radius, not by hype)</h3>
-<table>
-<thead>
-<tr>
-<th>Family</th>
-<th>Live example</th>
-<th>How reciprocity works</th>
-<th>Money?</th>
-<th>Free-rider / Sybil defense</th>
-<th>Fit for a small collective</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Non-monetary reciprocity commons</strong></td>
-<td>AI Horde (Haidra/dbzer0)</td>
-<td>"Kudos": complete a job → earn its kudos value; idle-but-online → trickle every 10 min. Kudos buy <strong>queue priority, never exclusion</strong></td>
-<td><strong>No</strong> (selling kudos is a ToS violation)</td>
-<td>Negative balance tolerated → just deprioritized; registered users start ≥25 kudos vs 0 anonymous</td>
-<td><strong>Best template</strong> for "lend GPU, get priority back"</td>
-</tr>
-<tr>
-<td><strong>Contribute-to-use credit + anti-cheat</strong></td>
-<td>BOINC, Folding@home</td>
-<td>Donated work earns credit ("cobblestones"/points)</td>
-<td>No</td>
-<td><strong>Replication-by-consensus</strong>: each job on 2+ hosts, credit only on quorum</td>
-<td>Lesson to copy, not a product to join</td>
-</tr>
-<tr>
-<td><strong>Academic / research federations</strong></td>
-<td>OSG, EGI; "condo" Slurm clusters</td>
-<td>Idle cycles preemptible by all; owners keep top priority via fairshare weighted by investment</td>
-<td>No</td>
-<td>Institutional identity; central scheduler</td>
-<td>Realistic via EGI/EOSC + FR/EU routes</td>
-</tr>
-<tr>
-<td><strong>Token-incentivized DePIN</strong></td>
-<td>io.net, Akash, Render, Aethir</td>
-<td>One token to <strong>both supply and consume</strong>: earn by hosting, spend on your own jobs</td>
-<td><strong>Yes (token)</strong></td>
-<td>Cryptographic: slashing/banning on failed uptime/verification</td>
-<td>Only true one-balance circle - but carries price/slashing/rent risk</td>
-</tr>
-</tbody>
-</table>
-<p>Sources: AI Horde <a href="https://github.com/Haidra-Org/AI-Horde/blob/main/FAQ.md">FAQ</a> and <a href="https://horde-sdk.readthedocs.io/en/latest/haidra-assets/docs/kudos/">kudos docs</a>; <a href="https://dbzer0.com/blog/the-kudos-based-economy-for-the-koboldai-horde/">dbzer0 kudos-economy blog</a>; BOINC <a href="https://boinc.berkeley.edu/trac/wiki/ValidationSimple">validation</a> and <a href="https://boinc.berkeley.edu/trac/wiki/AdaptiveReplication">adaptive replication</a>; <a href="https://osg-htc.org/">OSG</a>; <a href="https://www.egi.eu/article/the-egi-federation-reaches-1000000-cores/">EGI 1M-core milestone</a>.</p>
-<h3 id="2-ai-horde---the-cleanest-reciprocal-template-no-money-no-accounting-overhead">2. AI Horde - the cleanest reciprocal template (no money, no accounting overhead)</h3>
-<p>The most directly copyable model. A requester's job is assigned a kudos value; "if the request is allowed and is successfully completed by a worker, that worker is awarded the same number of kudos," and "you will also generate kudos every 10 minutes your worker stays online" - so <strong>being available is itself rewarded</strong> (<a href="https://github.com/Haidra-Org/AI-Horde/blob/main/FAQ.md">FAQ</a>). The design choices that make it durable:</p>
-<ul>
-<li><strong>Not a currency.</strong> "Kudos is inherently valueless and we do not allow anyone exchanging kudos for money" - the same rule applies to crypto. "The Kudos is merely a prioritization mechanism, <strong>not a currency</strong>" (<a href="https://github.com/Haidra-Org/AI-Horde/blob/main/FAQ.md">FAQ</a>). Kudos can be <strong>freely gifted</strong> (<code>api/v2/transfer</code>), <strong>never expire</strong>, and a higher balance only buys <strong>higher queue priority</strong>, never exclusive access (<a href="https://horde-sdk.readthedocs.io/en/latest/haidra-assets/docs/kudos/">kudos docs</a>).</li>
-<li><strong>Free-riding is deliberately tolerated.</strong> "You can still use this service even if you don't have any Kudos. You simply go negative, which represents your 'debt' to the community"; the shared Anonymous account "simply keeps going more and more in negative Kudos" - which only sorts its requests to the back of the priority queue (<a href="https://dbzer0.com/blog/the-kudos-based-economy-for-the-koboldai-horde/">dbzer0 blog</a>).</li>
-<li><strong>Tiny anti-Sybil nudge.</strong> Registered users start with ≥25 kudos, anonymous with 0 (<a href="https://horde-sdk.readthedocs.io/en/latest/haidra-assets/docs/kudos/">kudos docs</a>).</li>
-</ul>
-<p>The recurring <strong>success pattern</strong> across all four families: <em>priority-not-exclusion</em> (Horde), <em>redundant verification</em> (BOINC), <em>idle-cycle preemption with weighted fairshare</em> (condo/OSG).</p>
-<h3 id="3-the-reciprocity-spectrum---does-a-one-balance-virtuous-circle-exist">3. The reciprocity spectrum - does a "one-balance virtuous circle" exist?</h3>
+<h3 id="the-reciprocity-spectrum-four-bands">The reciprocity spectrum (four bands)</h3>
 <table>
 <thead>
 <tr>
 <th>Band</th>
 <th>Examples</th>
-<th>Earn and spend on <strong>one</strong> balance?</th>
-<th>Honest status</th>
+<th>Money?</th>
+<th>Same balance to earn <em>and</em> spend?</th>
+<th>Reward for hosting</th>
+<th>Honest verdict</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Pure mutual aid (no money/token)</td>
-<td>BOINC, Folding@home, <strong>Petals</strong></td>
-<td>No claim on compute</td>
-<td>Real commons, best-effort, <strong>no SLA</strong>. Petals' reward for hosting 10+ blocks is your name on the swarm monitor "as a way to say thanks"</td>
+<td>1. Pure give-to-get / mutual aid</td>
+<td>AI Horde, BOINC, Folding@home, Petals</td>
+<td>None</td>
+<td>Points = priority only (Horde); none (Petals)</td>
+<td>Queue priority (Horde) or a public "thanks" (Petals)</td>
+<td>Cleanest commons; best-effort, no SLA</td>
 </tr>
 <tr>
-<td>Marketplace, shared identity, <strong>no net-settle</strong></td>
-<td><strong>Vast.ai</strong>, RunPod</td>
-<td>No - roles are <strong>separated</strong></td>
-<td>Most practical today, but <strong>DIY</strong> reciprocity</td>
+<td>2. Marketplace, shared identity, <strong>no</strong> net-settle</td>
+<td>Vast.ai, RunPod</td>
+<td>Yes</td>
+<td><strong>No</strong> - roles kept separate by design</td>
+<td>Cash payout (separate account)</td>
+<td>Most practical today; DIY reciprocity</td>
 </tr>
 <tr>
-<td>Non-crypto points/balance</td>
-<td><strong>Salad</strong>, ShareAI</td>
-<td>Largely separate ledgers</td>
-<td>Closer to a circle; earn side from "real workloads… not blockchain or mining"</td>
+<td>3. Non-crypto points/balance</td>
+<td>Salad, ShareAI</td>
+<td>Yes</td>
+<td>Mostly separate ledgers</td>
+<td>Cash/gift-card balance</td>
+<td>Closer to a circle, marketing-heavy</td>
 </tr>
 <tr>
-<td><strong>Token DePIN</strong></td>
+<td>4. Token DePIN</td>
 <td>io.net, Akash, Render, Aethir</td>
-<td><strong>Yes</strong> - same token both ways</td>
-<td>Only true one-balance circle; bundled with price risk, slashing, <strong>rent dynamic</strong></td>
+<td>Token</td>
+<td><strong>Yes</strong> - one token both sides</td>
+<td>Token emissions</td>
+<td>Only true one-balance circle; carries rent + price risk</td>
 </tr>
 </tbody>
 </table>
+<h3 id="band-1---non-monetary-reciprocity-the-template-to-copy">Band 1 - non-monetary reciprocity (the template to copy)</h3>
+<p>The cleanest working model of "lend my GPU, get priority back" is <strong>AI Horde</strong> (Haidra / db0). Its rules, taken verbatim from the project's own <code>kudos.md</code>, are the design spec a small group can adopt almost unchanged:</p>
 <ul>
-<li><strong>Vast.ai actively separates the two roles</strong> for payout integrity: "Hosting requires a separate account from your client account," and "if you've ever rented instances or hosted machines on an account, you cannot cash out until your referral earnings exceed your lifetime instance spend" (<a href="https://docs.vast.ai/referral-program">referral docs</a>). You can self-fund (earn on the host account, top up the client account from the same bank), but there is <strong>no automatic credit netting</strong>.</li>
-<li><strong>Salad</strong> pays a "Salad Balance" redeemable for gift cards/PayPal/cash from real AI/render/transcription jobs; crypto mining is only the <em>fallback</em> workload (<a href="https://community.salad.com/sell-gpu-power/">Salad</a>, <a href="https://support.salad.com/article/356-how-does-my-machine-earn-salad-balance">support</a>).</li>
-<li><strong>Akash Homenode</strong> (early access announced 25 Feb 2026) lets consumer <strong>RTX 4090/5090</strong> owners contribute and earn - the closest thing to a turnkey "rent my gaming rig into the network" path (<a href="https://www.prnewswire.com/news-releases/akash-launches-early-access-for-homenode-bringing-decentralized-compute-to-everyday-devices-302696087.html">PR Newswire</a>, <a href="https://homenode.akash.network/">homenode.akash.network</a>).</li>
+<li><em>"if the request is allowed and is successfully completed by a worker, that worker is awarded the same number of kudos"</em> - the requester's charge is exactly the worker's reward.</li>
+<li><em>"workers receive a nominal amount of kudos merely for being online and available, in 10-minute increments"</em> - <strong>availability itself is rewarded</strong>, not just completed work.</li>
+<li><em>"It is against the Terms of Service to sell or buy kudos"</em>; <em>"Kudos can be freely exchanged between users for any reason other than for currency"</em>; <em>"Kudos never expire."</em></li>
+<li><em>"The total number of kudos in your account determines your starting place in line when queuing a job"</em> - kudos buy <strong>priority, not exclusion</strong>. <em>"Anonymous users start with 0 kudos, while registered users have at least 25"</em> (a small anti-Sybil nudge). Free-riding is deliberately tolerated: a no-kudos request is simply served last, never blocked. (Source: <a href="https://github.com/Haidra-Org/haidra-assets/blob/main/docs/kudos.md">haidra-assets/docs/kudos.md</a>.)</li>
 </ul>
-<h3 id="4-the-rent-inside-the-commons-risk-the-best-documented-finding">4. The rent-inside-the-commons risk (the best-documented finding)</h3>
-<p>Token reciprocity <strong>financializes</strong> the commons. Of <strong>650+ DePIN projects</strong> (combined market cap &gt;$16B) by late 2024, <strong>fewer than 20 generated meaningful non-token revenue</strong> (<a href="https://blockeden.xyz/blog/2026/03/21/depin-march-2026-reality-check-650-projects-19b-market-cap-revenue/">BlockEden</a>). io.net showed the failure mode bluntly: in Q1 2025 it reported <strong>327,000 registered GPUs but only ~6,720 verified active daily (~2% utilization)</strong>, because block rewards are paid to every operator passing uptime checks regardless of real jobs; "when token prices fell, so did provider incentives," and networks lacking organic demand saw utilization collapse (<a href="https://messari.io/report/state-of-io-net-q1-2025">Messari, State of io.net Q1 2025</a>). Emissions are inflationary by design, so early "yield" is partly other holders' dilution - <strong>rent extracted from the token, not earned from compute</strong>.</p>
-<p>The 2026 corrective attempts are real but unproven: <strong>Akash's Burn-Mint Equilibrium</strong> went live <strong>23 March 2026</strong> - every on-chain compute payment triggers a market buy-and-burn of AKT and mints a <strong>stable settlement credit (ACT)</strong> at USD pricing, to re-anchor the token to usage (<a href="https://akash.network/roadmap/aep-76/">AEP-76</a>, <a href="https://akash.network/blog/akash-network-q1-2026-report/">Q1 2026 report</a>); io.net's parallel fix is its Incentive Dynamic Engine.</p>
-<h3 id="5-the-lesson-boinc-encodes-anti-cheat-by-replication">5. The lesson BOINC encodes: anti-cheat by replication</h3>
-<p>BOINC's durable contribution to any shared pool is <strong>redundancy as the Sybil/free-rider defense</strong>: each work unit is sent to 2+ independent hosts and credit is granted only to results that reach a <strong>quorum/consensus</strong>; the system assumes every node is unreliable or malicious except the central server, with <strong>adaptive replication</strong> skipping re-runs for proven-reliable hosts to save overhead (<a href="https://boinc.berkeley.edu/trac/wiki/ValidationSimple">validation</a>, <a href="https://boinc.berkeley.edu/trac/wiki/AdaptiveReplication">adaptive replication</a>). Folding@home layers a <em>Quick Return Bonus</em> and team competition on top.</p>
-<h3 id="6-the-free-publicphilanthropic-layer-a-small-collective-can-actually-tap">6. The free public/philanthropic layer a small collective can actually tap</h3>
+<p><strong>BOINC</strong> and <strong>Folding@home</strong> add the missing anti-cheat layer. BOINC assumes every node is unreliable or malicious except the central server, so it <strong>replicates each job across independent hosts and grants credit only to a validated quorum/consensus</strong>; <em>adaptive replication</em> then stops re-running jobs sent to proven-reliable hosts, pulling the ~2× verification overhead back toward ~1× (target only 5–10% of CPU time). This is exactly the Sybil/free-rider defense expressed as code. (Sources: <a href="https://github.com/BOINC/boinc/wiki/CreditNew">BOINC CreditNew wiki</a>; <a href="https://boinc.berkeley.edu/trac/wiki/AdaptiveReplication">AdaptiveReplication</a>; Anderson, <em>BOINC: A Platform for Volunteer Computing</em>, 2019, <a href="https://arxiv.org/pdf/1903.01699">arXiv:1903.01699</a>.) Folding@home's <strong>Quick Return Bonus</strong> rewards fast, reliable turnaround - <code>final_points = base_points × max(1, sqrt(k × deadline_length / elapsed_time))</code>, gated by a passkey and an 80%+ successful-return record (Sources: <a href="https://foldingathome.org/faqs/points/bonus-points/">Folding@home bonus-points FAQ</a>; <a href="https://foldingathome.org/faqs/points/bonus-points/what-are-the-qualifications-for-the-qrb/">QRB qualifications</a>).</p>
+<p><strong>Petals</strong> (collaborative LLM inference, BigScience, 2022) is the honest limit case: genuine mutual aid, but <strong>no token and no enforceable priority</strong> - the only documented thanks for hosting 10+ blocks is being named on the public swarm monitor (<code>--public_name</code>). A points-for-priority scheme appears in its README only as a <em>possible future</em> incentive, not live behavior. So mutual aid exists, but it gives you no claim on compute when <em>you</em> need it. (Source: <a href="https://github.com/bigscience-workshop/petals/blob/main/README.md">Petals README</a>.)</p>
+<blockquote>
+<p><strong>Scale note (volatile).</strong> Volunteer pools are large but their headline FLOPS move. As of November 2025, BOINC runs ~<strong>18.6 petaFLOPS</strong> (24h average) across ~89,400 computers - not the ~41 PFLOPS / ~791,000-machine figure still quoted in some summaries, which appears stale. (<a href="https://grokipedia.com/page/Berkeley_Open_Infrastructure_for_Network_Computing">Grokipedia: BOINC</a>). Treat any single FLOPS number as a snapshot.</p>
+</blockquote>
+<h3 id="band-2---marketplaces-reciprocity-is-diy-not-a-feature">Band 2 - marketplaces: reciprocity is DIY, not a feature</h3>
+<p>Vast.ai and RunPod let one person be <em>both</em> host and renter - but <strong>not cleanly on one balance</strong>. Vast.ai's own documentation: <em>"If you've ever rented instances or hosted machines on an account, you cannot cash out until your referral earnings exceed your lifetime instance spend,"</em> and hosting uses a <strong>separate account from the client account</strong>. The platform actively <em>separates</em> the two roles for payout integrity; you can self-fund (earn on the host account, top up the client account from the same bank) but there is <strong>no automatic credit netting</strong>. (<a href="https://docs.vast.ai/guides/reference/referral-program">Vast.ai referral docs</a>.) This is the most practical option today, but the "virtuous circle" is something you assemble by hand.</p>
+<h3 id="band-4---token-depin-the-only-true-one-balance-circle-and-where-rent-creeps-back">Band 4 - token DePIN: the only true one-balance circle, and where rent creeps back</h3>
+<p>Token networks are the only band explicitly designed so you <strong>supply and consume the same token</strong>. Akash opened <strong>Homenode beta</strong> (Feb 2026) for consumer RTX 4090/5090 owners to contribute and earn (<a href="https://www.prnewswire.com/news-releases/akash-launches-early-access-for-homenode-bringing-decentralized-compute-to-everyday-devices-302696087.html">PRNewswire, 25 Feb 2026</a>), and shipped <strong>Burn-Mint Equilibrium</strong> on 23 March 2026, which market-buys and burns AKT on every compute payment to mint a stable settlement credit (ACT), re-anchoring the token to real usage (<a href="https://akash.network/roadmap/aep-76/">Akash AEP-76</a>).</p>
+<p>But the best-documented finding in this whole cluster is that <strong>token reciprocity financializes the commons into rent</strong>:</p>
 <table>
 <thead>
 <tr>
-<th>Program</th>
-<th>What it offers</th>
-<th>Easy entry?</th>
+<th>Symptom</th>
+<th>Figure</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DePIN projects with meaningful non-token revenue</td>
+<td><strong>fewer than 20 of 650+</strong> (late 2024, &gt;$16B combined market cap)</td>
+<td><a href="https://blockeden.xyz/blog/2026/04/12/depin-revenue-pivot-token-subsidies-ai-compute-akash-render-ionet/">BlockEden, Apr 2026</a></td>
+</tr>
+<tr>
+<td>io.net registered vs. verified-active GPUs (Q1 2025)</td>
+<td><strong>327,000 registered → ~6,720 active daily (~2%)</strong></td>
+<td><a href="https://research.nansen.ai/articles/ionet-does-it-have-what-it-takes">Nansen Research</a></td>
+</tr>
+</tbody>
+</table>
+<p>The mechanism is plain: <em>block rewards are paid to every operator passing uptime checks</em> regardless of real jobs, so emissions can subsidize empty infrastructure; when token prices fall, mercenary supply switches off and utilization collapses. Because emissions are inflationary by design - they dilute holders to fund growth - early "yield" is partly other people's dilution, i.e. <strong>a rent extracted from the token, not earned from compute</strong>. Akash's BME and io.net's incentive redesign are direct attempts to strip that rent out, which is itself an admission the original design leaked it.</p>
+<h3 id="the-public--philanthropic-layer-and-the-eu-caveat">The public / philanthropic layer (and the EU caveat)</h3>
+<p>A real, growing commons exists at the funding layer - but in 2025–2026 it is mostly <strong>US-academic-gated</strong>: New York's <strong>Empire AI "Alpha"</strong> (donated by the Simons Foundation / Flatiron Institute, a nine-university consortium) runs ~200 NVIDIA H100-class GPUs (<a href="https://www.empireai.edu/2025/06/27/empire-ai-launches-beta-one-of-the-most-powerful-academic-ai-supercomputers-in-the-nation/">Empire AI, June 2025</a>); the <strong>Massachusetts AI Hub</strong> ($31M) reserves <em>"at least 40% of compute time… for startups, entrepreneurs and partner institutions including non-member colleges and nonprofits"</em> (<a href="https://masstech.org/news/governor-healey-advances-states-ai-leadership-major-investments-massachusetts-ai-hub">MassTech, May 2025</a>); alongside NSF ACCESS and the NAIRR Pilot. <strong>For a Paris-based collective the realistic equivalents are EGI / EOSC and French/EU research-infrastructure routes</strong>, where pooled idle capacity is already vast - OSG delivered &gt;1.2 billion CPU-hours in 2024 (&gt;100M opportunistic) (<a href="https://osg-htc.org/">OSG</a>) and the EGI Federation served ~116,000 users across ~1.24M cores in 2024 (<a href="https://www.egi.eu/article/egi-federation-annual-report-2024-now-available/">EGI 2024 report</a>; <a href="https://www.egi.eu/article/the-egi-federation-reaches-1000000-cores/">EGI 1M-cores milestone</a>).</p>
+<h3 id="bottom-line-for-a-36-person-artist-researcher-collective">Bottom line for a 3–6 person artist-researcher collective</h3>
+<p>The most reliable virtuous circle is <strong>self-built</strong>, not bought:</p>
+<ol type="1">
+<li><strong>Reciprocity layer (no money).</strong> Pool real hardware and share it internally by a non-monetary fair-use ledger - copy AI Horde's kudos logic (reward both completed jobs <em>and</em> uptime; points buy priority, never exclusion; free-riding tolerated but deprioritized). Keeping money out of this layer also sidesteps the fiscal and legal questions that paid pooling would raise.</li>
+<li><strong>Anti-cheat.</strong> If trust ever frays, borrow BOINC's pattern: replicate to a quorum, grant credit only on consensus, relax replication for proven-reliable peers.</li>
+<li><strong>Co-location, later.</strong> If you ever buy hardware together, run a "condominium" cluster: owners get top priority on their own nodes (e.g. Slurm fairshare weighted by contribution) while idle cycles are preemptable by everyone - mutualizing slack without losing ownership.</li>
+<li><strong>Overflow.</strong> Use Vast.ai / RunPod / Salad as a supply-side outlet (rent your idle rig) and a demand-side overflow (burst when the pool is full) - but expect DIY reciprocity, not one-balance netting.</li>
+<li><strong>Free public credits.</strong> Apply in parallel to EGI/EOSC and French/EU research-infrastructure programs rather than the US-gated NAIRR/Empire AI/CalCompute tier.</li>
+</ol>
+<blockquote>
+<p><strong>Practical, not legal advice.</strong> Any move from a non-monetary fair-use ledger to <em>paid</em> compute-sharing, token rewards, or cash payouts can carry tax, VAT, and contractual consequences (and, for token bands, securities/price exposure). Treat the points above as options to confirm with a qualified professional under French/EU law, never as settled law. Before pooling or buying anything, write a one-page Ostrom-style charter: clear membership boundaries, rules fit to your group, collective decision-making, monitoring by accountable members, <strong>graduated</strong> sanctions, and cheap conflict resolution. (Ostrom, 1990; Mozilla digital-commons framework, 2024.)</p>
+</blockquote>
+<hr />
+<h2 id="mutualizing-compute-how-a-small-collective-actually-lends-gpus-to-each-other">Mutualizing compute: how a small collective actually lends GPUs to each other</h2>
+<p>For a small, <em>trusted</em> artist-researcher collective - say one MacBook, one Mac Mini, and two RTX 5090 Windows boxes - "sharing GPUs" is not one problem but three, stacked from easy to underestimated: <strong>networking</strong>, <strong>orchestration</strong>, and <strong>isolation/governance</strong>. A fourth, <strong>French legal/fiscal qualification</strong>, sits underneath all of it. Every fiscal point below is an <em>option to put to an expert-comptable or avocat fiscaliste</em>, never settled law.</p>
+<h3 id="layer-1---networking-the-solved-layer">Layer 1 - Networking (the solved layer)</h3>
+<p>This is the part that genuinely works out of the box. <a href="https://tailscale.com/kb/1084/sharing">Tailscale</a> is a WireGuard mesh VPN where you can share <strong>a single node</strong> with one named friend without exposing the rest of your network:</p>
+<ul>
+<li><em>"A shared machine is visible only to the individual recipient user - it is not visible to the recipient user's entire tailnet."</em> (<a href="https://tailscale.com/kb/1084/sharing">tailscale.com/kb/1084/sharing</a>)</li>
+<li>Shared machines are <strong>quarantined by default</strong>: they can answer incoming connections from the tailnet they're shared to but cannot initiate their own, and recipient access still obeys the owner tailnet's ACLs (<a href="https://tailscale.com/kb/1084/sharing">same source</a>).</li>
+<li>A reusable invite link works <strong>up to 1,000 times</strong> and unused links <strong>expire after 30 days</strong>; only an Owner/Admin/IT admin can share (<a href="https://tailscale.com/kb/1084/sharing">same source</a>).</li>
+</ul>
+<p>This is exactly the trust-scoping a collective wants: you lend access to <em>one GPU box</em>, not to your network. Tailscale even pitches the use case directly - <em>"Imagine splitting the cost of a good GPU with your friends and everyone getting private AI access from anywhere"</em> (<a href="https://tailscale.com/blog/self-host-a-local-ai-stack">tailscale.com/blog/self-host-a-local-ai-stack</a>).</p>
+<blockquote>
+<p><strong>Hype check.</strong> A tempting but wrong synthesis claims "Tailscale Peer Relays (GA 2025) keep distributed-compute traffic flowing across CGNAT, marketed alongside GPU cost-splitting." Two corrections: Peer Relays reached <strong>general availability on 18 February 2026</strong> (introduced October 2025), per <a href="https://tailscale.com/blog/peer-relays-ga">tailscale.com/blog/peer-relays-ga</a>; and the GPU-cost-splitting blog post above <strong>never mentions</strong> Peer Relays, CGNAT, firewalls, or distributed compute. Peer Relays do solve hard-NAT traversal - just keep the two facts separate.</p>
+</blockquote>
+<h3 id="layer-2---orchestration-pick-by-ambition">Layer 2 - Orchestration (pick by ambition)</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Best for</th>
+<th>How sharing works</th>
+<th>Key constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="https://github.com/exo-explore/exo">Exo</a></strong></td>
+<td>A Mac-heavy fleet running LLM <strong>inference</strong></td>
+<td>Self-discovering <strong>p2p</strong> cluster (no master-worker), tensor-parallel sharding (~1.8x on 2 devices, ~3.2x on 4), MLX backend on Apple Silicon, exposes an OpenAI-compatible API at <code>http://localhost:52415</code></td>
+<td>Per the current repo, <strong>Linux is CPU-only</strong>, GPU support still under development - so the RTX 5090 Windows boxes are <strong>not yet first-class GPU peers</strong> (<a href="https://github.com/exo-explore/exo">github.com/exo-explore/exo</a>)</td>
+</tr>
+<tr>
+<td><strong><a href="https://dstack.ai/docs/concepts/fleets/">dstack</a></strong></td>
+<td>Real job orchestration on existing boxes</td>
+<td>"SSH fleets": list hosts + SSH key in YAML; <strong>GPU blocks</strong> partition a host into concurrent slots (<code>blocks: 4</code> splits GPU/CPU/mem evenly; <code>blocks: auto</code> = one per GPU); <code>placement: cluster</code> wires hosts for distributed jobs</td>
+<td>Hosts must be <strong>Linux + Docker</strong>, the SSH user needs <strong>passwordless sudo</strong>, the SSH server needs <strong><code>AllowTcpForwarding yes</code></strong>, NVIDIA hosts need CUDA 12.1 + NVIDIA Container Toolkit. A Windows RTX 5090 box must run <strong>WSL2 or dual-boot Linux</strong> (<a href="https://dstack.ai/docs/concepts/fleets/">dstack.ai</a>)</td>
+</tr>
+<tr>
+<td><strong><a href="https://docs.skypilot.co/en/latest/overview.html">SkyPilot</a></strong></td>
+<td>Portability across your boxes <strong>and</strong> rented cloud</td>
+<td><code>sky ssh up</code> turns IPs + SSH creds into an <strong>SSH Node Pool</strong>; <code>sky launch --infra ssh/my-node-pool</code> targets it; one CLI also spans Kubernetes, Slurm, and clouds</td>
+<td>Useful only if you sometimes burst beyond your own hardware (<a href="https://docs.skypilot.co/en/stable/reservations/existing-machines.html">docs.skypilot.co</a>)</td>
+</tr>
+<tr>
+<td><strong>SLURM fairshare</strong></td>
+<td>Classic HPC accounting</td>
+<td><code>PriorityDecayHalfLife</code> defaults to <strong>7 days</strong> (raw usage decayed ~every 5 min); <code>TRESBillingWeights</code> bills CPU/mem/each GPU model separately</td>
+<td>Overkill for a tiny collective (<a href="https://slurm.schedmd.com/priority_multifactor.html">slurm.schedmd.com</a>, <a href="https://hpc-docs.uni.lu/slurm/fairsharing/">hpc-docs.uni.lu</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>For governance at collective scale, the heavy SLURM machinery is unnecessary: <strong>wall-time limits + automatic checkpointing</strong>, or <strong>dstack GPU blocks as hard quotas</strong>, give you "Shared Mode" (lend idle GPUs, reclaim when the owner needs them) without a scheduler.</p>
+<h3 id="layer-3---isolation-the-part-people-underestimate">Layer 3 - Isolation (the part people underestimate)</h3>
+<p><strong>Letting someone run code on your GPU machine is letting them run code on your machine.</strong> Two hard facts:</p>
+<ol type="1">
+<li><strong>Containers are not a security barrier.</strong> <a href="https://www.wiz.io/blog/nvidia-ai-vulnerability-cve-2025-23266-nvidiascape">NVIDIAScape (CVE-2025-23266, CVSS 9.0, disclosed July 2025 by Wiz)</a> showed a <strong>three-line Dockerfile</strong> - <code>FROM busybox</code> / <code>ENV LD_PRELOAD=/proc/self/cwd/poc.so</code> / <code>ADD poc.so /</code> - escaping the NVIDIA Container Toolkit's <code>createContainer</code> hook to <strong>host root</strong>, because the hook inherits the image's environment variables. All NCT <strong>≤ v1.17.7</strong> were affected (fixed in v1.17.8). Wiz's verbatim lesson: <em>"containers are not a strong security barrier and should not be relied upon as the sole means of isolation."</em></li>
+<li><strong>GPUs leak between tenants.</strong> Outside specialized features like MIG, GPUs <strong>generally lack tenant-level memory isolation</strong>; leftover VRAM can be read by the next job unless zeroed, and shared hardware enables contention side-channels (plus newer GPU Rowhammer-class attacks) (<a href="https://introl.com/blog/multi-tenant-gpu-security-isolation-strategies-shared-infrastructure-2025">introl.com</a>, <a href="https://www.tomshardware.com/pc-components/gpus/new-geforge-and-gddrhammer-attacks-can-fully-infiltrate-your-system-through-nvidias-gpu-memory-rowhammer-attacks-in-gpus-force-bit-flips-in-protected-vram-regions-to-gain-read-write-access">tomshardware.com</a>).</li>
+</ol>
+<p><strong>The isolation ladder, weakest → strongest:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>Mechanism</th>
 <th>Note</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>NSF ACCESS</strong> (Explore tier)</td>
-<td>HPC/cloud allocations</td>
-<td><strong>Abstract only</strong>; grad students can be PI</td>
-<td>US-academic-oriented</td>
+<td>(a)</td>
+<td>Trust + plain SSH user accounts</td>
+<td>Only for genuinely trusted peers - the realistic case for a small collective</td>
 </tr>
 <tr>
-<td><strong>NAIRR Pilot</strong></td>
-<td>Cloud credits + HPC + datasets</td>
-<td>Application</td>
-<td>Microsoft $20M Azure + NVIDIA $30M support</td>
+<td>(b)</td>
+<td>Containers</td>
+<td><strong>Convenience, not security</strong> (see NVIDIAScape)</td>
 </tr>
 <tr>
-<td><strong>CZI</strong></td>
-<td>1,024×H100 DGX SuperPOD</td>
-<td>Competitive RFA</td>
-<td>2025 cycle 9 Jan–18 Jun, 96-GPU min request</td>
+<td>(c)</td>
+<td>VM with GPU passthrough (IOMMU/VT-d/AMD-Vi + <code>vfio-pci</code>)</td>
+<td>Near-native perf, full isolation, snapshot/restore on compromise</td>
 </tr>
 <tr>
-<td><strong>Empire AI (NY)</strong></td>
-<td>"Alpha" ~200 NVIDIA GPUs</td>
-<td>Consortium-gated</td>
-<td>Simons/Flatiron gift, nine universities</td>
+<td>(d)</td>
+<td><a href="https://github.com/kata-containers/kata-containers/blob/main/docs/use-cases/GPU-passthrough-and-Kata.md">Kata Containers</a></td>
+<td>Pods inside lightweight micro-VMs with a <strong>separate kernel</strong>; supports full GPU passthrough (one GPU/pod), built for untrusted/multi-tenant inference</td>
 </tr>
 <tr>
-<td><strong>Massachusetts AI Hub</strong></td>
-<td>$31M; AICR at MGHPCC</td>
-<td>Partner/nonprofit</td>
-<td><strong>≥40% of compute reserved for startups/nonprofits</strong></td>
+<td>(e)</td>
+<td>MIG (true hardware memory-path isolation)</td>
+<td><strong>Not on the consumer RTX 5090.</strong> MIG is product-segmented, not Blackwell-gated: the RTX PRO 6000 (same GB202 die) supports 4 instances, datacenter Blackwell up to 7 (<a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/supported-gpus.html">docs.nvidia.com</a>, <a href="https://www.fluence.network/blog/nvidia-rtx-5090/">fluence.network</a>)</td>
+</tr>
+<tr>
+<td>(f)</td>
+<td>Confidential Computing (H100/Blackwell datacenter)</td>
+<td>For the paranoid</td>
 </tr>
 </tbody>
 </table>
-<p>Sources: <a href="https://allocations.access-ci.org/prepare-requests">ACCESS</a>; <a href="https://www.fiercesensors.com/electronics/nairr-pilot-gets-30m-nvidia-20m-azure">NAIRR $20M/$30M</a>; <a href="https://chanzuckerberg.com/rfa/ai-computing-gpu/">CZI RFA</a>; <a href="https://www.empireai.edu/2025/06/27/empire-ai-launches-beta-one-of-the-most-powerful-academic-ai-supercomputers-in-the-nation/">Empire AI Beta</a>; <a href="https://www.mghpcc.org/governor-healey-advances-states-ai-leadership-with-major-investments-in-massachusetts-ai-hub/">Massachusetts AI Hub</a>.</p>
-<p><strong>Caveat for a Paris collective:</strong> most of the above is US-academic-gated. The realistic European equivalents are <strong>EGI/EOSC</strong> and French/EU research-infrastructure routes - the federation that served ~116,000 users in 2024 and passed the 1,000,000-core milestone (<a href="https://www.egi.eu/article/the-egi-federation-reaches-1000000-cores/">EGI</a>).</p>
-<h3 id="7-governance-is-the-real-bottleneck-and-it-is-cheap-to-get-right">7. Governance is the real bottleneck (and it is cheap to get right)</h3>
-<p>Every durable system above maps onto <strong>Elinor Ostrom's 8 design principles</strong> for common-pool resources (<em>Governing the Commons</em>, 1990): clear boundaries/membership; rules fit to local conditions; collective-choice; monitoring by accountable members; <strong>graduated sanctions</strong>; cheap conflict resolution; recognized right to self-govern; nested layers (<a href="https://wiki.p2pfoundation.net/Eight_Design_Principles_for_Common_Pool_Resource_Systems">summary</a>). <strong>Mozilla's 2024 practical framework</strong> translates these to digital/data commons in a form a small group can copy almost verbatim (<a href="https://www.mozillafoundation.org/en/blog/a-practical-framework-for-applying-ostroms-principles-to-data-commons-governance/">Mozilla Foundation, 2024</a>). The recurring <strong>failure mode is governance, not technology</strong>: unmonitored free-riding, missing graduated sanctions, and Sybil identities.</p>
-<h3 id="8-recommended-stack-for-36-artists">8. Recommended stack for 3–6 artists</h3>
-<ol type="1">
-<li><strong>Reciprocity layer (no money).</strong> A private AI Horde / Petals-style swarm or a simple shared fair-use ledger among trusted peers. Keep money <em>out</em> of this layer to avoid fiscal/legal complications.</li>
-<li><strong>Co-located hardware (if any).</strong> Slurm <strong>fairshare</strong> or a shared queue with idle-cycle preemption - the "condo" logic: top priority on hardware you contributed, slack preemptible by all.</li>
-<li><strong>Overflow.</strong> Vast.ai / RunPod / Salad to rent out idle rigs on the <strong>supply</strong> side and burst on the demand side.</li>
-<li><strong>Free credits in parallel.</strong> EGI/EOSC + French/EU routes (and NSF ACCESS / NAIRR / CZI where eligible).</li>
-<li><strong>Charter first.</strong> Write a one-page Ostrom-style charter (membership, contribution rule, graduated sanctions, conflict resolution) <em>before</em> buying or pooling anything.</li>
-</ol>
+<p><strong>Practical rule for a small collective:</strong> lend only to trusted humans, prefer a dedicated/dual-boot Linux box you'd be willing to wipe, isolate with a passthrough VM you can snapshot, <strong>zero VRAM between users, patch the NVIDIA Container Toolkit, and never expose the box to the open internet</strong> (Tailscale-only + ACLs + quarantine).</p>
+<h3 id="layer-4---french-legalfiscal-qualification-confirm-with-a-professional">Layer 4 - French legal/fiscal qualification (confirm with a professional)</h3>
 <blockquote>
-<p><strong>Fiscal/legal note - confirm with a professional, not settled French law.</strong> If a shared pool ever moves money (rental income from a co-op rig, paid overflow, token rewards), that may create accounting, VAT, or tax obligations and possibly require a legal vehicle (e.g. an <em>association</em>, <em>SCIC/coopérative</em>, or <em>GIE</em>). Token rewards add the question of how French tax treats crypto received for providing compute. These are <strong>options to verify with an accountant/lawyer</strong>, stated here only to flag that the cleanest reciprocity design keeps money out of the loop entirely.</p>
+<p><strong>Disclaimer.</strong> None of this is firm French tax law as applied to your situation. Every point must be confirmed by an <strong>expert-comptable or avocat fiscaliste</strong> before money - or even a reciprocal favour - changes hands.</p>
 </blockquote>
-<hr />
-<p><strong>Killed / demoted for rigor.</strong> EGI's "~1.24M cores" → replaced with the publicly verifiable <strong>1,000,000-core</strong> milestone (users ~116,000 <em>is</em> confirmed). BOINC's precise "41.58 PFLOPS / 791,443 machines" → stated as approximate/undated (live dashboards could not be retrieved). Akash's "ACT stablecoin" → softened to <strong>"stable settlement credit"</strong> per the primary source. Folding@home participant counts kept only as a general characterization.</p>
-<hr />
-<p><em>Sources for this section are linked inline above. The consolidated, verified source list and the verification method are in <a href="../SOURCES.md">SOURCES.md</a>.</em></p>
-<hr />
-<h2 id="mutualizing-compute-concretely-lending-and-sharing-gpus">Mutualizing compute: concretely lending and sharing GPUs</h2>
-<blockquote>
-<p><strong>Disclaimer.</strong> Everything below about French tax, social-security and liability law describes <em>general regimes</em>, not a ruling on any specific compute-sharing arrangement. Treat every fiscal statement as an <strong>option to confirm with an expert-comptable or avocat fiscaliste</strong> before relying on it. Nothing here is settled law as applied to GPU-sharing.</p>
-</blockquote>
-<p>For a small artist-researcher collective that wants to lend each other GPUs, the engineering is the easy part. The hard part is the <em>legal category</em> the sharing falls into, because each category triggers different tax, VAT and liability consequences. The single most important finding: <strong>a one-way free loan is clean; an explicit reciprocal exchange probably is not.</strong></p>
-<h3 id="what-is-real-and-proven">What is real (and proven)</h3>
-<p>The technical pattern works and is published. <strong>GPUnion</strong> (Li et al., <em>GPUnion: Autonomous GPU Sharing on Campus</em>, HotNets '25, arXiv 2507.18928) demonstrates campus-scale borrowing of idle GPUs with three mechanisms - container-based task dispatch, a <em>provider-first</em> architecture (every node decides when to join/pause/leave), and resilient execution with automatic checkpointing and migration. Reported results: <strong>+30% GPU utilization, +40% interactive sessions, 94% successful workload migration</strong> when a provider pulls out (<a href="https://arxiv.org/abs/2507.18928">arXiv</a>, <a href="https://dl.acm.org/doi/abs/10.1145/3772356.3772403">ACM DL</a>). This is the closest existing template for a trust-based, revocable, reciprocal collective.</p>
-<p>At institutional scale, <strong>GENCI / MesoNET</strong> (EquipEx+ PIA3, launched Oct 2021) federates <strong>22 partners</strong> - GENCI plus 21 regional <em>mésocentres</em> - into a mutualized HPC/AI/Quantum infrastructure with a single national allocation portal and a pooled engineering team (<a href="https://www.mesonet.fr/2_le-projet.html">mesonet.fr</a>, <a href="https://www.genci.fr/en/learn-about-genci/our-ecosystem">GENCI</a>). It shows the governance pattern worth copying: <strong>a trusted network plus central allocation</strong>, rather than ad-hoc peer deals.</p>
-<h3 id="what-is-hype-or-simply-wrong">What is hype (or simply wrong)</h3>
+<p>The <em>act</em> of letting someone use your machine falls into different legal boxes, and the box drives the tax treatment:</p>
 <ul>
-<li><strong>"It's reciprocal, so it's free, so there's no tax."</strong> This is the central trap. <em>Pure one-way</em> free lending is fiscally clean. But an explicit <em>"I lend you my 5090 IF you lend me yours"</em> reads in French doctrine as <strong>troc / échange</strong>, which is taxable even with <strong>no cash changing hands</strong>: VAT can fall due when each invoice is recorded, each leg valued in the taxable base (<a href="https://www.experts-et-decideurs.fr/vie-entreprise/gestion-entreprise/troc-entre-entreprises-traitement-comptable-fiscal/">Experts et Décideurs</a>, <a href="https://www.creer-gerer-entreprendre.fr/6-la-gestion-de-lentreprise/6-6-la-gestion-commerciale/echange-marchandises/">Créer-Gérer-Entreprendre</a>). <em>(Confirm with a fiscaliste for your exact setup.)</em></li>
-<li><strong>"Lending raw compute is liability-free."</strong> False once personal data is involved. Running someone's job on your machine makes you a <strong>sous-traitant under GDPR art. 28</strong>: you may only process on documented instruction, cannot reuse the data, and need a written DPA. Reuse on your own initiative reclassifies you as a <em>responsable de traitement</em>. Fines reach <strong>€10M / 2% turnover</strong> for art. 28 breaches (<a href="https://www.donneespersonnelles.fr/article-28-rgpd">donneespersonnelles.fr</a>, <a href="https://www.leto.legal/articles-rgpd/article-28">Leto</a>).</li>
-<li><strong>A widely-copied figure is wrong.</strong> The 2025 <em>franchise des impôts commerciaux</em> for associations is <strong>€80,011</strong>, not the €81,051 seen in some sources (<a href="https://www.legifiscal.fr/actualites-fiscales/4096-franchise-impot-associations-seuil-porte-80011.html">LégiFiscal</a>, confirmed against <a href="https://bofip.impots.gouv.fr/bofip/2659-PGP.html/identifiant=BOI-IS-CHAMP-10-50-20-20-20250416">BOFiP</a>).</li>
+<li><strong>Prêt à usage / commodat</strong> (Code civil <strong>art. 1875-1876</strong>) is <em>"essentiellement gratuit"</em> by nature and is the <strong>cleanest box for pure reciprocal lending</strong> (<a href="https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006136396/">Légifrance</a>). The catch: <em>any</em> consideration paid to the lender, or any <strong>équivalent economic advantage</strong>, can strip the commodat qualification and requalify the arrangement as an <strong>onerous contract (location/bail)</strong> (<a href="https://www.fiscaloo.fr/14633-commodat-ou-pret-a-usage/">fiscaloo.fr</a>). A strict tit-for-tat "you lend me GPU, I lend you GPU" could itself read as an <em>avantage économique équivalent</em> - <strong>this exact point must be checked.</strong></li>
+<li><strong>Prestation de service / BIC</strong> - if money or a measurable counterpart flows, you're likely rendering a commercial service.</li>
+<li><strong>Échange (barter)</strong> - reciprocal exchange is, for tax purposes, generally treated as two valued transactions, not a wash.</li>
 </ul>
-<h3 id="the-clean-default-prêt-à-usage-commodat">The clean default: prêt à usage (commodat)</h3>
-<p>The lowest-friction path is the <strong>prêt à usage</strong> (commodat), <em>Code civil</em> art. 1875 ff. Art. 1876 is unambiguous: <em>« Ce prêt est essentiellement gratuit. »</em> (<a href="https://www.doctrine.fr/l/texts/codes/LEGITEXT000006070721/articles/LEGIARTI000006444687">Doctrine / Légifrance</a>). The borrower must conserve the thing (art. 1880) and is liable for misuse (art. 1881) but not for normal wear (art. 1884).</p>
-<table>
-<thead>
-<tr>
-<th>Element</th>
-<th>Effect on the commodat</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Free, one-way use</td>
-<td>✅ Stays a commodat</td>
-</tr>
-<tr>
-<td>Borrower pays electricity / upkeep of use (art. 1886)</td>
-<td>✅ Does <strong>not</strong> disqualify it (cost of use, not remuneration)</td>
-</tr>
-<tr>
-<td>Any real economic counterpart flowing to the lender</td>
-<td>❌ Risks <strong>automatic requalification as a bail/location</strong> → taxable rental income</td>
-</tr>
-<tr>
-<td>Explicit mutual exchange of machines</td>
-<td>❌ Risks treatment as <strong>troc/échange</strong> → potentially taxable, VAT</td>
-</tr>
-</tbody>
-</table>
-<p>Sources: <a href="https://www.captain.legal/fr/demarches-quotidiennes/commodat-pret-a-usage/">Captain Legal</a>, <a href="https://www.fiscaloo.fr/14633-commodat-ou-pret-a-usage/">Fiscaloo</a>. The practical toolkit French associations and communes already use: a written <strong>convention de mise à disposition de matériel</strong> (duration, conservation, return, who bears damage/loss) + a <strong>charte informatique</strong> (acceptable use). Drafted as a pure prêt à usage, these allocate liability <em>without</em> creating a taxable consideration.</p>
-<h3 id="three-vehicles-to-formalize-sharing">Three vehicles to formalize sharing</h3>
+<p><strong>The structures that keep it clean:</strong></p>
 <table>
 <thead>
 <tr>
 <th>Vehicle</th>
-<th>Min. setup</th>
-<th>Tax position</th>
-<th>Liability</th>
-<th>Key constraint</th>
-<th>Best for</th>
+<th>Fiscal posture</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Association loi 1901</strong></td>
-<td>Free, declaratory</td>
-<td>Non-profit; commercial-tax <em>franchise</em> up to <strong>€80,011 (2025)</strong> for accessory lucrative activity if <em>gestion désintéressée</em> + règle des 4P + non-lucrative predominance</td>
-<td>Members generally shielded</td>
-<td><strong>Cannot distribute benefits</strong> to members; profit-sharing risks requalification into <em>société créée de fait</em> (no legal personality, members personally &amp; indefinitely liable)</td>
-<td>Pooling/lending shared kit among members, no profit motive</td>
+<td><strong>Pure reciprocal commodat</strong> (no money, no measurable counterpart)</td>
+<td>Cleanest, <em>subject to the avantage-équivalent caveat above</em></td>
 </tr>
 <tr>
-<td><strong>GIE</strong> (Groupement d'Intérêt Économique)</td>
-<td><strong>2 members min, no capital</strong></td>
-<td><strong>Fiscally transparent</strong> - not taxed as such; each member taxed on its share</td>
-<td>Members <strong>responsables solidairement et indéfiniment sur leurs biens personnels</strong></td>
-<td>Activity must be the <em>prolongement</em> (auxiliary extension) of members' activities, never a substitute</td>
-<td>Members who already have an economic activity and want to pool <em>means</em> (e.g. a shared GPU rig)</td>
+<td><strong>Association loi 1901</strong> with gestion désintéressée</td>
+<td>Escapes IS/TVA/CET on <strong>accessory</strong> lucrative receipts only if non-lucrative activity stays predominant <strong>and</strong> lucrative receipts stay under the <strong>2024 franchise des impôts commerciaux of €78,596</strong> (up from €76,679 in 2023) (<a href="https://www.legifiscal.fr/actualites-fiscales/3733-franchise-impot-associations-seuil-porte-78596.html">legifiscal.fr</a>)</td>
 </tr>
 <tr>
-<td><strong>SCIC</strong> (Société Coopérative d'Intérêt Collectif)</td>
-<td>SARL/SAS min 3 associés, SA min 7; multi-stakeholder</td>
-<td>≥<strong>57.5%</strong> of result locked in <em>réserves impartageables</em> (15% légale + 50% of remainder; raisable to 100%); locked reserves deductible from IS</td>
-<td>Limited (company form)</td>
-<td>Heavier governance: <strong>1 person = 1 vote</strong>, multiple associate categories</td>
-<td>A durable, multi-stakeholder shared-compute commons</td>
+<td><strong>SCIC</strong></td>
+<td><strong>Fiscalisée de plein droit</strong> - commercial taxes apply by reason of corporate form, no sectoral carve-out (<a href="https://questions.assemblee-nationale.fr/q15/15-10160QE.htm">Assemblée nationale, Q. n°10160</a>)</td>
 </tr>
 </tbody>
 </table>
-<p>Sources: association - <a href="https://www.assistant-juridique.fr/but_non_lucratif_association.jsp">Assistant-juridique</a>, <a href="https://associations.gouv.fr/lexception-lassujettissement-aux-impots-commerciaux">associations.gouv.fr</a>, threshold <a href="https://www.legifiscal.fr/actualites-fiscales/4096-franchise-impot-associations-seuil-porte-80011.html">LégiFiscal</a>; GIE - <a href="https://bpifrance-creation.fr/encyclopedie/structures-juridiques/se-regrouper-solutions-juridiques/gie-groupement-dinteret">Bpifrance Création</a>; SCIC - <a href="https://www.l-expert-comptable.com/a/6074-societe-cooperative-d-interet-collectif-scic-definition-avantages.html">L-Expert-Comptable</a>, <a href="https://www.les-scic.coop/foire-aux-questions">Les Scic FAQ</a>.</p>
-<p>The SCIC is not theoretical: <strong>1,421 SCICs existed in France by end-2025</strong> (+10.4% since 2022), with 17,547 jobs and €1.7bn revenue (<a href="https://www.entreprises.coop/les-societes-cooperatives-d-interet-collectif-scic">Coop FR</a>, <a href="https://www.les-scic.coop/chiffres-cles">Les Scic - chiffres clés</a>).</p>
-<h3 id="practical-decision-path">Practical decision path</h3>
-<ol type="1">
-<li><strong>Default to one-way, free prêt à usage</strong> for occasional, no-money lending - cheapest and cleanest. Paper it with a <em>convention de mise à disposition</em> + <em>charte informatique</em>.</li>
-<li><strong>Avoid framing it as an explicit swap.</strong> If reciprocity is the point, route it through a shared structure (GIE or association) rather than bilateral I-lend-you-you-lend-me deals, to avoid <em>troc</em> treatment - and <strong>get a fiscaliste's sign-off</strong>.</li>
-<li><strong>Add a GDPR layer</strong> whenever a job may touch personal data: documented-instruction clause + written DPA (art. 28), or restrict shared compute to non-personal-data workloads.</li>
-<li><strong>For anything durable or multi-party</strong>, weigh GIE (transparent, but joint+several liability) vs SCIC (limited liability, locked reserves, heavier governance).</li>
-</ol>
-<p><em>Credits: GPUnion - Li et al., HotNets '25 (2025); MesoNET/GENCI - EquipEx+ PIA3 (2021–). Legal articles cited to Code civil (art. 1875–1886) and RGPD art. 28.</em></p>
+<p><strong>The battle-tested French precedent</strong> for mutualizing infrastructure among small ethical structures is <strong>CHATONS</strong> (<em>Collectif des Hébergeurs Alternatifs, Transparents, Ouverts, Neutres et Solidaires</em>), launched by <strong>Framasoft on 9 February 2016</strong> (<a href="https://framablog.org/2016/10/12/naissance-du-collectif-chatons/">framablog.org</a>). CHATONS is a <strong>charter-bound collective whose members are each their own legal entity</strong> (mostly assos loi 1901), and members demonstrably <strong>load-shed compute between each other</strong>: during the April 2020 lockdown, Framasoft offloaded its most-used services onto less-burdened member structures (<a href="https://fr.wikipedia.org/wiki/Collectif_des_h%C3%A9bergeurs_alternatifs,_transparents,_ouverts,_neutres_et_solidaires">fr.wikipedia.org</a>). The actionable lesson: a <strong>charte d'usage + convention de mise à disposition</strong> between named members can carry most of the weight, without immediately reaching for a heavy legal vehicle.</p>
+<hr />
+<p><em>Sources accessed June 2026. Technical claims verified against vendor documentation and the Wiz disclosure; fiscal points stated as options requiring professional confirmation under French law.</em></p>
+<hr />
+<h2 id="how-to-organize-a-positive-compute-commons">How to organize a positive compute commons</h2>
+<h3 id="can-you-really-be-in-a-virtuous-circle">Can you really be in a virtuous circle?</h3>
+<p>YES, you can genuinely be in a give-and-take compute commons, but the clean "one balance, net-settle" version only exists if you accept a token economy and its rent dynamics. For a small artist/research collective the realistic answer is a points-and-priority commons among trusted peers, NOT a financialized pool. Here is the honest options ladder, cheapest-trust-cost first:</p>
+<p>RUNG 0 (today, zero infra): Use AI Horde as the existence proof and a real outlet. Run a worker on your 5090s when idle, earn kudos for completed jobs AND for mere online availability (nominal kudos in 10-minute increments), then spend kudos to jump the queue when you need more than your own box gives. Kudos can't be bought/sold, never expire, can be gifted. This is a true earn-idle / draw-busy loop, but the "draw" is shared community inference capacity, not a private cluster for training a big custom model.</p>
+<p>RUNG 1 (your gear, trusted peers, lending): Tailscale node-sharing to lend ONE quarantined GPU box to ONE named collaborator when you're not using it, ACL-scoped, revocable. Tailscale itself markets "split the cost of a good GPU with your friends." This is the cleanest reciprocity primitive: you lend your 4090 box this month, a peer lends theirs next month. No token, no netting product, just human tit-for-tat.</p>
+<p>RUNG 2 (your gear, real orchestrated pool): Stand up a federated pool across the collective's machines. For Mac-heavy LLM inference, Exo (p2p, MLX, OpenAI-compatible API on :52415) - but note Linux/Windows is still CPU-only in Exo today, so your Windows RTX 5090 boxes are NOT yet first-class GPU peers there. For real GPU job orchestration including your 5090s, dstack SSH fleets with "GPU blocks" as hard quotas (requires each box run Linux/WSL2 + Docker + NVIDIA Container Toolkit). Add SLURM fairshare or simple wall-time + checkpointing for "you contributed more, you get more" accounting. This is where "earn-idle / draw-busy" actually becomes real on YOUR hardware, settled by social accounting (a shared ledger, fairshare decay) rather than a salable token.</p>
+<p>RUNG 3 (burst when training big): When a job exceeds the collective's pooled GPUs, SkyPilot unifies your SSH machines + rented cloud into one CLI ("sky launch --infra ssh"), so you self-fund a burst. On commercial marketplaces (Vast.ai) you CAN both host and rent, but Vast.ai deliberately keeps host and renter on separate accounts and blocks cashout until referral earnings exceed lifetime spend, so the "one balance net-settle" is something YOU assemble manually, not a feature.</p>
+<p>RUNG 4 (only if you accept rent risk): Token DePIN (Akash Homenode beta for 4090/5090 owners; io.net). This is the ONLY band designed so you supply and consume the same token. Akash's Burn-Mint Equilibrium (live 23 Mar 2026) is an explicit attempt to re-anchor the token to real usage, which is itself an admission the original design leaked rent. Treat any "yield" as partly other holders' dilution, not earned compute.</p>
+<p>What a real virtuous circle requires (the load-bearing constraints): credit BOTH completed work and idle availability (or idle gets unrewarded and the commons starves); make credit non-salable and priority-only (the moment it's sellable or grants exclusion, it becomes rent); defend against free-riders/Sybil by deprioritizing rather than excluding (AI Horde) and by quorum-replication if results must be trusted (BOINC); keep the pool small and trust-based so isolation risk stays manageable. The richest public-commons programs (NAIRR, Empire AI, CalCompute, Mass AI Hub) are mostly US-academic-gated and NOT a realistic tap for a Paris collective; your equivalents are EGI/EOSC and French/EU research-infrastructure routes.</p>
+<h3 id="modalities-technical-governance-legal">Modalities: technical, governance, legal</h3>
+<p>TECHNICAL (federated pool tooling + isolation/security):</p>
+<ul>
+<li>Networking (solved): Tailscale node-sharing exposes ONLY the single shared machine to one named recipient ("not visible to the recipient's entire tailnet"); shared machines are quarantined by default (answer incoming, cannot initiate outbound); recipient still bound by your tailnet ACLs; reusable invite links work up to 1,000 times, expire unused in 30 days; only Owner/Admin can share. Accurate trust-scoping for lending one GPU box. (Note: Tailscale Peer Relays reached GA 18 Feb 2026, but Tailscale's own GPU-cost-splitting blog never mentions Peer Relays/CGNAT/distributed compute, that linkage would be your inference, not their claim.)</li>
+<li>Orchestration tiers: Exo (p2p, no master-worker, tensor parallelism ~1.8x on 2 devices / ~3.2x on 4, MLX backend, OpenAI-compatible API at localhost:52415, Thunderbolt 5 RDMA ~99% latency cut) BUT current repo lists Linux as CPU-only, GPU support under development, so Windows/Linux RTX 5090 boxes are NOT yet first-class GPU peers, best fit is a Mac-heavy fleet. dstack SSH fleets (list of hosts + SSH key in YAML; "GPU blocks" partition a host into concurrent slots as hard quotas; "placement: cluster" for distributed jobs) require Linux + Docker + passwordless sudo + AllowTcpForwarding yes + CUDA 12.1 + NVIDIA Container Toolkit, so a Windows 5090 box must run WSL2 or dual-boot. SkyPilot ("sky ssh up", "sky launch --infra ssh") unifies SSH machines + cloud + k8s + Slurm into one pool, good for cloud burst. SLURM fairshare (PriorityDecayHalfLife default 7 days, usage decayed every ~5 min, TRESBillingWeights bills each GPU model at separate rates) is capable but overkill for a tiny collective, simpler equivalents are wall-time limits + checkpointing or dstack GPU blocks.</li>
+<li>Isolation (the real risk, NOT solved by containers): NVIDIAScape (CVE-2025-23266, CVSS 9.0, disclosed July 2025 by Wiz) escapes the NVIDIA Container Toolkit to host root via a 3-line Dockerfile (LD_PRELOAD trick); all NCT up to v1.17.7 affected, fixed in v1.17.8. Wiz's verbatim lesson: "containers are not a strong security barrier and should not be relied upon as the sole means of isolation." GPUs leak between tenants: outside MIG they lack tenant-level memory isolation, so unclear VRAM lets a later job read leftover data, plus contention side-channels and GPU Rowhammer-class attacks. MIG (true hardware memory-path isolation) is NOT on consumer RTX 5090, it is product-segmented (same GB202 die ships MIG on RTX PRO 6000 but not on the 5090). Practical rung above plain containers: Kata Containers (each pod in a lightweight VM with its own kernel via hypervisor, full GPU passthrough one-GPU-per-pod, positioned for untrusted/multi-tenant). HONEST RULE: lend only to trusted humans, on a box you'd wipe, Tailscale-only access, VRAM zeroed between users, NCT patched.</li>
+</ul>
+<p>GOVERNANCE (commons / Ostrom, fairness, free-riding/Sybil):</p>
+<ul>
+<li>Reward model: AI Horde awards a fulfilling worker exactly the kudos the requester was charged, AND gives online-but-idle workers nominal kudos in 10-minute increments, so availability itself is rewarded (this is the design that keeps a commons from starving). Kudos can't be bought/sold (ToS violation), can be freely gifted, never expire, only set queue priority (priority, NOT exclusive access); registered users start with &gt;=25 kudos, anonymous with 0.</li>
+<li>Free-riding posture: tolerated and simply deprioritized, never excluded (Ostrom-compatible: graduated, non-punitive). Folding@home's Quick Return Bonus (final_points = base * max(1, sqrt(k * deadline / elapsed)), gated by passkey + 80%+ return record) shows how to reward reliability without coercion.</li>
+<li>Sybil / cheating defense as code: BOINC replicates each job across independent hosts and grants credit only to a validated quorum/consensus; adaptive replication then skips re-running jobs sent to proven-reliable hosts, cutting ~2x overhead toward ~1x (target 5-10% of CPU time). Use this only if results must be trusted by strangers; among trusted peers it's overkill.</li>
+<li>Scale reality check: pooled idle academic capacity is enormous and near-free (OSG &gt;1.2B CPU-hours in 12 months, &gt;100M opportunistic; EGI ~116,000 users across ~1.24M cores) but those are NOT a direct tap for you. BOINC's real current throughput is ~18.6 PFLOPS / ~89,400 computers (Nov 2025), an order smaller than the stale "41.58 PFLOPS / 791,443 machines" figure still circulating.</li>
+</ul>
+<p>LEGAL / ECONOMIC / FISCAL (France, FLAG: confirm with an expert-comptable or avocat fiscaliste, this is NOT settled advice):</p>
+<ul>
+<li>Pure reciprocal lending: a true commodat / prêt à usage (Code civil art. 1875-1876) is by nature "essentiellement gratuit" and is the cleanest legal box for non-monetary lending. BUT any consideration to the lender, or any equivalent economic advantage, can strip the commodat and requalify the act as onerous (rental/bail). CRITICAL NUANCE TO CHECK: strict tit-for-tat GPU-for-GPU lending could itself read as an "avantage économique équivalent" and lose the commodat qualification, this exact point must go to a professional.</li>
+<li>Association loi 1901 (gestion désintéressée): escapes IS/TVA/CET on accessory lucrative receipts only if non-lucrative activity stays significantly predominant AND lucrative receipts stay under the 2024 franchise des impôts commerciaux of 78,596 EUR (up from 76,679 in 2023). A SCIC by contrast is fiscalisée de plein droit (commercial taxes apply by reason of corporate form, no sectorisation carve-out), per BOFiP and a parliamentary answer.</li>
+<li>CHATONS (Collectif des Hébergeurs Alternatifs) is the French/francophone reference culture for exactly this kind of decentralized, non-lucrative, ethical self-hosting commons, a natural community/legal frame to study before building.</li>
+<li>TOKEN/DePIN warning has a fiscal dimension too: token rewards are not neutral lending, they create taxable events and price exposure, another reason to keep the trusted-peer commons non-monetary and to consult a professional before any token path.</li>
+<li>BLANKET FLAG: every fiscal framing above is an option to confirm, never settled law, and the right move is a single short consult with an expert-comptable/avocat fiscaliste before formalizing any structure.</li>
+</ul>
+<h3 id="open-questions">Open questions</h3>
+<ul>
+<li>FRENCH FISCAL/LEGAL: whether strict reciprocal GPU-for-GPU lending counts as an 'avantage économique équivalent' that strips the commodat (prêt à usage) qualification and makes it an onerous/taxable contract. This is the single most consequential open question and only an expert-comptable or avocat fiscaliste can settle it.</li>
+<li>Whether a tiny trusted collective should adopt any formal structure (association loi 1901 vs informal commodat vs SCIC) at all, or stay fully informal until receipts/scale force the question. The 78,596 EUR franchise and gestion-désintéressée tests are real but their application to compute-sharing specifically is unverified here.</li>
+<li>Exo's GPU support roadmap for Linux/Windows: today the RTX 5090 boxes are not first-class GPU peers in Exo, so the cleanest Mac-heavy inference fleet may not actually harness your most powerful cards. The timeline for Exo GPU support is unknown.</li>
+<li>Real-world security posture: the findings establish the threat (NVIDIAScape, VRAM leakage, no MIG on 5090) but not a validated, low-effort isolation recipe a non-expert can run. Kata Containers is the named rung above plain containers, but its operational cost/complexity for a solo artist is untested.</li>
+<li>Token DePIN economics are moving fast (Akash BME 23 Mar 2026, io.net incentive redesign): whether these redesigns actually eliminate the rent dynamic or just relabel it is not yet demonstrable, and any participation carries unmodeled price/slashing risk.</li>
+<li>EGI/EOSC and French/EU research-infrastructure access routes are named as the realistic public-commons equivalent for a Paris collective, but the actual eligibility, application path, and whether an independent artist-researcher (not a university) qualifies are not established in these findings.</li>
+</ul>
 <hr />
 <p><em>Sources for this section are linked inline above. The consolidated, verified source list and the verification method are in <a href="../SOURCES.md">SOURCES.md</a>.</em></p>
-<div class="meta">Genere depuis 10-mutualizing-compute-commons.md — 2026-06-16 03:11</div></div>
+<div class="meta">Genere depuis 10-mutualizing-compute-commons.md — 2026-06-16 03:44</div></div>
 </body>
 </html>

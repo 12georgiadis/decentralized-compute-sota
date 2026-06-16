@@ -6,7 +6,7 @@ authors:
   - family-names: "Joffroy Chandoutis"
     given-names: "Ismaël"
 date-released: 2026-06-16
-version: "0.1.0"
+version: "0.2.0"
 license: "CC-BY-NC-ND-4.0"
 url: "https://github.com/12georgiadis/decentralized-compute-sota"
 keywords:
