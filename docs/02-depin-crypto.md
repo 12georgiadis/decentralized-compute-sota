@@ -36,4 +36,4 @@ Aethir publishes the sector's largest revenue figures - \$127.8M+ for 2025, \$16
 
 ---
 
-*Sources for this section are linked inline above. The consolidated, verified source list and the verification method are in [SOURCES.md](../SOURCES.md).*
+*Sources for this section are linked inline above. The consolidated source list is in [SOURCES.md](../SOURCES.md).*

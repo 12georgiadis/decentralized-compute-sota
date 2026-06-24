@@ -66,4 +66,4 @@ Data centres used ~415 TWh in 2024 (~1.5% of global electricity) and the IEA Bas
 
 ---
 
-*Sources for this section are linked inline above. The consolidated, verified source list and the verification method are in [SOURCES.md](../SOURCES.md).*
+*Sources for this section are linked inline above. The consolidated source list is in [SOURCES.md](../SOURCES.md).*
