@@ -65,11 +65,9 @@ Drawn from the synthesis (full list in section 7):
 
 ---
 
-## Method
+## Notes
 
-This is a human-authored, human-edited survey built on AI-assisted multi-source research. Findings were gathered by parallel web-search and source-fetch agents, then **adversarially verified**: each load-bearing figure had to survive an independent refutation pass, and claims that failed are recorded in [SOURCES.md](SOURCES.md) rather than quietly dropped. Where a number could only be traced to a vendor's own page, it is labeled as such. Treat every dollar figure as a dated snapshot.
-
-Corrections and additional sources are welcome via issues and pull requests.
+Dollar figures are dated snapshots from mid-2026 and drift over time; vendor-reported numbers are labelled as self-reported. Corrections and additional sources are welcome via issues and pull requests.
 
 ---
 

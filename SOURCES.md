@@ -1,18 +1,16 @@
-# Sources and verification method
+# Sources
 
-This repository is a sourced survey. This file is its consolidated **bibliography and verification log**.
+This repository is a sourced survey. This file is its consolidated **bibliography**.
 
 ## How sources are cited here
 
 - **In the text.** Every non-trivial claim links inline to its primary source (organization, document, date).
 - **Vendor figures are flagged.** Any number that could only be traced to a company's own page is labeled self-reported.
 - **Dated snapshots.** All dollar figures are snapshots from mid-June 2026 and drift over time.
-- **Refuted claims are kept, not hidden.** Claims that failed adversarial verification are listed under "Refuted / do-not-repeat" so they are never silently propagated.
+- **Claims that did not hold up are kept, not hidden** — listed under "Refuted / do-not-repeat" rather than silently dropped.
 - **The signed essay** ([essai/decentralisation-du-compute.fr.md](essai/decentralisation-du-compute.fr.md)) carries its own formal bibliography.
 
-## Method
-
-Findings were gathered by parallel web-search and source-fetch passes, then independently re-verified: each load-bearing figure had to survive a refutation attempt. A confidence level (high / medium / low) is marked on each finding below.
+A confidence level (high / medium / low) is marked on each finding below.
 
 ---
 

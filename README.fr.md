@@ -33,7 +33,7 @@ Le motif maître : partout, la **capacité annoncée dépasse de très loin la c
 
 ## Lire
 
-Le survey technique complet et sourcé est en anglais dans [docs/](docs/) (sections 1 à 10). L'annexe des sources, des constats vérifiés et des affirmations réfutées : [SOURCES.md](SOURCES.md).
+Le survey technique complet et sourcé est en anglais dans [docs/](docs/) (sections 1 à 10). L'annexe des sources : [SOURCES.md](SOURCES.md).
 
 La lecture critique, en français et signée, est ici : **[essai/decentralisation-du-compute.fr.md](essai/decentralisation-du-compute.fr.md)**.
 
